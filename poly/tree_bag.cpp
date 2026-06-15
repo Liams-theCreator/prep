@@ -17,7 +17,7 @@ TreeBag &TreeBag::operator=(const TreeBag &other)
     return *this;
 }
 
-virtual TreeBag::~TreeBag()
+TreeBag::~TreeBag()
 {
     clear();
 }
@@ -34,7 +34,7 @@ node *TreeBag::copy_node(const node *n)
     return copy;
 }
 
-virtual void TreeBag::insert(int val)
+void TreeBag::insert(int val)
 {
     node **current = &tree;
     while (*current)
@@ -49,7 +49,7 @@ virtual void TreeBag::insert(int val)
     (*current)->l = NULL;
     (*current)->r = NULL;
 }
-virtual void TreeBag::insert(int *array, int size)
+void TreeBag::insert(int *array, int size)
 {
     if (!array || size <= 0)
         return ;
@@ -57,7 +57,7 @@ virtual void TreeBag::insert(int *array, int size)
         insert(array[i]);
 }
 
-virtual void TreeBag::print() const
+void TreeBag::print() const
 {
     print_node(tree);
     std::cout << std::endl;
@@ -72,7 +72,7 @@ void TreeBag::print_node(const node *n) const
     print_node(n->r);
 }
 
-virtual void TreeBag::clear()
+void TreeBag::clear()
 {
     destroy_tree(tree);
     tree = NULL;

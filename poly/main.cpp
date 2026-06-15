@@ -10,8 +10,8 @@ int main(int argc, char **argv)
 {
 	if (argc == 1)
 		return 1;
-	searchable_bag *t = new searchable_tree_bag;
-	searchable_bag *a = new searchable_array_bag;
+	searchable_bag *t = new SearchableTreeBag;
+	searchable_bag *a = new SearchableArrayBag;
 
 	for (int i = 1; i < argc; i++) {
 		t->insert(atoi(argv[i]));
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 	t->clear();
 	a->clear();
 
-	const searchable_array_bag tmp(static_cast<searchable_array_bag &>(*a));
+	const SearchableArrayBag tmp(static_cast<SearchableArrayBag &>(*a));
 	tmp.print();
 	tmp.has(1);
 

@@ -11,16 +11,16 @@ SearchableTreeBag &SearchableTreeBag::operator=(const SearchableTreeBag &other)
     return *this;
 }
 
-virtual SearchableTreeBag::~SearchableTreeBag() {}
+SearchableTreeBag::~SearchableTreeBag() {}
 
-virtual bool SearchableTreeBag::has(int val) const
+bool SearchableTreeBag::has(int val) const
 {
     node *current = tree;
     while (current)
     {
-        if (current->value == val)
+        if (current->val == val)
             return true;
-        else if (val < current->value)
+        else if (val < current->val)
             current = current->l;
         else
             current = current->r;

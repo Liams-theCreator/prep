@@ -10,7 +10,7 @@ class TreeBag : public Bag
 		{
 			node *l;
 			node *r;
-			int val;
+			int value;
 		};
 		node *tree;
 	private:
