@@ -14,7 +14,7 @@ class TreeBag : public Bag
 	private:
 		void destroy_tree(node *n);
 		void print_node(const node *n) const ;
-		void copy_node(const node *n);
+		node *copy_node(const node *n);
 	public:
 		TreeBag();
 		TreeBag(const TreeBag &other);

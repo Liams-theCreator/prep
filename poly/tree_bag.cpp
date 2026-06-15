@@ -23,9 +23,39 @@ virtual TreeBag::~TreeBag()
 }
 
 
-void TreeBag::copy_node(const node *n);
-virtual void TreeBag::insert(int val);
-virtual void TreeBag::insert(int *array, int size);
+node *TreeBag::copy_node(const node *n)
+{
+    if (!n)
+        return NULL;
+    node *copy = new node;
+    copy->value = n->value;
+    copy->l = copy_node(n->l);
+    copy->r = copy_node(n->r);
+    return copy;
+}
+
+virtual void TreeBag::insert(int val)
+{
+    node **current = &tree;
+    while (*current)
+    {
+        if (val < (*current)->value)
+            current = &(*current)->l;
+        else
+            current = &(*current)->r;
+    }
+    *current = new node;
+    (*current)->value = val;
+    (*current)->l = NULL;
+    (*current)->r = NULL;
+}
+virtual void TreeBag::insert(int *array, int size)
+{
+    if (!array || size <= 0)
+        return ;
+    for (int i = 0; i < size; i++)
+        insert(array[i]);
+}
 
 virtual void TreeBag::print() const
 {
