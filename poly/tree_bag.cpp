@@ -23,7 +23,7 @@ TreeBag::~TreeBag()
 }
 
 
-node *TreeBag::copy_node(const node *n)
+TreeBag::node *TreeBag::copy_node(const node *n)
 {
     if (!n)
         return NULL;

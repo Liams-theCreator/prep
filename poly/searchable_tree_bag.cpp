@@ -18,7 +18,7 @@ bool SearchableTreeBag::has(int val) const
     node *current = tree;
     while (current)
     {
-        if (current->val == val)
+        if (current->value == val)
             return true;
         else if (val < current->val)
             current = current->l;
