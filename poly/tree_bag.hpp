@@ -3,7 +3,7 @@
 
 #include "bag.hpp"
 
-class TreeBag : public Bag
+class TreeBag : virtual public Bag
 {
 	protected:
 		struct node 

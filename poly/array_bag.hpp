@@ -3,7 +3,7 @@
 
 #include "bag.hpp"
 
-class ArrayBag : public Bag
+class ArrayBag : virtual public Bag
 {
 	protected:
 		int *data;

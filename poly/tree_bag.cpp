@@ -1,4 +1,6 @@
 #include "tree_bag.hpp"
+#include <iostream>
+#include <cstddef>
 
 TreeBag::TreeBag(): tree(0) {}
 

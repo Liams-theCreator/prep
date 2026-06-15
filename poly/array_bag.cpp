@@ -1,4 +1,6 @@
 #include "array_bag.hpp"
+#include <iostream>
+#include <cstddef>
 
 ArrayBag::ArrayBag(): data(0), size(0) {}
 

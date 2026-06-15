@@ -3,7 +3,7 @@
 
 #include "bag.hpp"
 
-class searchable_bag : public Bag 
+class searchable_bag : virtual public Bag 
 {
     public:
         virtual bool has(int val) const = 0;
