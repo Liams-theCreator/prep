@@ -1,6 +1,8 @@
 #ifndef TREEBAG_HPP
 #define TREEBAG_HPP
 
+#include "bag.hpp"
+
 class TreeBag : public Bag
 {
 	protected:

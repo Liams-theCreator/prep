@@ -33,7 +33,7 @@ void set::insert(int *array, int size)
 void set::print() const
 {
     if (!bag)
-        return;
+        return ;
     bag->print();
 }
 
@@ -47,6 +47,11 @@ void set::clear()
 void set::has(int val) const
 {
     if (!bag)
-        return ;
+        return false;
     return bag->has(val);
+}
+
+searchable_bag &set::get_bag()
+{
+    return *bag;
 }

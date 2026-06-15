@@ -12,7 +12,7 @@ class SearchableArrayBag : public ArrayBag, public searchable_bag
         SearchableArrayBag &operator=(const SearchableArrayBag &other);
         virtual ~SearchableArrayBag();
 
-        virtual bool had(int val) const;
+        virtual bool has(int val) const;
 };
 
 #endif

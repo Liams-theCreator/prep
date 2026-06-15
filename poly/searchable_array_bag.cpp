@@ -11,9 +11,9 @@ SearchableArrayBag &SearchableArrayBag::operator=(const SearchableArrayBag &othe
     return *this;
 }
 
-virtual SearchableArrayBag::~SearchableArrayBag() {}
+SearchableArrayBag::~SearchableArrayBag() {}
 
-virtual bool SearchableArrayBag::had(int val) const
+bool SearchableArrayBag::has(int val) const
 {
     for(int i = 0; i < size; i++)
     {

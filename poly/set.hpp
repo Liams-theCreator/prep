@@ -19,8 +19,8 @@ class set
         void print() const;
         void clear();
         
-        void has(int val) const;
-
+        bool has(int val) const;
+        searchable_bag &get_bag();
 };
 
 #endif

@@ -2,7 +2,7 @@
 
 ArrayBag::ArrayBag(): data(0), size(0) {}
 
-ArrayBag(const ArrayBag &other)
+ArrayBag::ArrayBag(const ArrayBag &other)
 {
     if (other.size > 0)
     {
@@ -12,9 +12,9 @@ ArrayBag(const ArrayBag &other)
             data[i] = other.data[i];
     }
 }
-ArrayBag &operator=(const ArrayBag &other)
+ArrayBag &ArrayBag::operator=(const ArrayBag &other)
 {
-    if (this != other)
+    if (this != &other)
     {
         clear();
         if (other.size > 0)
@@ -28,12 +28,12 @@ ArrayBag &operator=(const ArrayBag &other)
     return *this;
 }
 
-virtual ArrayBag::~ArrayBag()
+ArrayBag::~ArrayBag()
 {
     clear();
 }
 
-virtual void TreeBag::insert(int val)
+virtual void ArrayBag::insert(int val)
 {
     int *tmp = new int[size + 1];
     for (int i = 0; i < size; i++)
@@ -44,22 +44,22 @@ virtual void TreeBag::insert(int val)
     size++;
 }
 
-virtual void TreeBag::insert(int *array, int size)
+virtual void ArrayBag::insert(int *array, int size)
 {
     if (!array || size <= 0)
         return ;
     for (int i = 0; i < size ; i++)
-        insert(data[i]);
+        insert(array[i]);
 }
 
-virtual void TreeBag::print() const
+virtual void ArrayBag::print() const
 {
     for (int i = 0; i < size; i++)
         std::cout << data[i] << " ";
     std::cout << std::endl;
 }
 
-virtual void TreeBag::clear()
+virtual void ArrayBag::clear()
 {
     if (data)
         delete[] data;

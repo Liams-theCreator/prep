@@ -4,7 +4,7 @@ SearchableTreeBag::SearchableTreeBag(): TreeBag() {}
 
 SearchableTreeBag::SearchableTreeBag(const SearchableTreeBag &other): TreeBag(other) {}
 
-SearchableArrayBag &SearchableTreeBag::operator=(const SearchableTreeBag &other)
+SearchableTreeBag &SearchableTreeBag::operator=(const SearchableTreeBag &other)
 {
     if (this != &other)
         TreeBag::operator=(other);
@@ -13,7 +13,7 @@ SearchableArrayBag &SearchableTreeBag::operator=(const SearchableTreeBag &other)
 
 virtual SearchableTreeBag::~SearchableTreeBag() {}
 
-virtual bool SearchableTreeBag::had(int val) const
+virtual bool SearchableTreeBag::has(int val) const
 {
     node *current = tree;
     while (current)
