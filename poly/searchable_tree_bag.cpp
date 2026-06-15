@@ -20,7 +20,7 @@ bool SearchableTreeBag::has(int val) const
     {
         if (current->value == val)
             return true;
-        else if (val < current->val)
+        else if (val < current->value)
             current = current->l;
         else
             current = current->r;
