@@ -22,6 +22,7 @@ void set::insert(int val)
     if (!bag->has(val))
         bag->insert(val);
 }
+
 void set::insert(int *array, int size)
 {
     if (!bag || size <= 0 || !array)
@@ -44,7 +45,7 @@ void set::clear()
     bag->clear();
 }
         
-void set::has(int val) const
+bool set::has(int val) const
 {
     if (!bag)
         return false;

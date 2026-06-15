@@ -2,7 +2,7 @@
 
 ArrayBag::ArrayBag(): data(0), size(0) {}
 
-ArrayBag::ArrayBag(const ArrayBag &other)
+ArrayBag::ArrayBag(const ArrayBag &other): data(0), size(0)
 {
     if (other.size > 0)
     {
@@ -12,7 +12,7 @@ ArrayBag::ArrayBag(const ArrayBag &other)
             data[i] = other.data[i];
     }
 }
-ArrayBag &ArrayBag::operator=(const ArrayBag &other): data(0), size(0)
+ArrayBag &ArrayBag::operator=(const ArrayBag &other)
 {
     if (this != &other)
     {
