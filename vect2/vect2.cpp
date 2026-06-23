@@ -14,6 +14,7 @@ vect2 &vect2::operator=(const vect2 &other)
 }
 vect2::~vect2() {}
 
+
 int &vect2::operator[](int index)
 {
     if (index == 0)
