@@ -48,14 +48,14 @@ int parse_map(FILE *f, t_map *m)
     char   *line = NULL;
     size_t  cap = 0;
     ssize_t n;
-    int     i = 0, j;
+    int     i, j;
 
     getline(&line, &cap, f);
     m->cols = -1;
     m->grid = calloc(m->rows, sizeof(char *));
     if (!m->grid)
         return (free(line), 0);
-    while (i < m->rows) 
+    for (i = 0; i < m->rows; i++)
     {
         n = getline(&line, &cap, f);
         if (n < 1)
@@ -69,16 +69,13 @@ int parse_map(FILE *f, t_map *m)
         m->grid[i] = malloc(m->cols + 1);
         if (!m->grid[i])
             return (free(line), free_grid(m, i), 0);
-        j = 0;
-        while (j < m->cols) 
+        for (j = 0; j < m->cols; j++)
         {
             if (line[j] != m->empty && line[j] != m->obstacle && line[j] != m->full)
                 return (free(line), free_grid(m, i + 1), 0);
             m->grid[i][j] = (line[j] == m->full) ? m->empty : line[j];
-            j++;
         }
         m->grid[i][m->cols] = '\0';
-        i++;
     }
     free(line);
     return 1;
