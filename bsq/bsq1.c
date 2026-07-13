@@ -13,8 +13,10 @@ typedef struct s_map
 
 int min3(int a, int b, int c)
 {
-    int m = (a < b) ? a : b;
-    return (m < c) ? m : c;
+    int m = a;
+    if (b < m) m = b;
+    if (c < m) m = c;
+    return m;
 }
 
 void free_grid(t_map *m, int n)
