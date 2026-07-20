@@ -1,166 +1,217 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <unistd.h>
 
 typedef struct s_map
 {
-    int     rows;
-    int     cols;
-    char    empty;
-    char    obstacle;
-    char    full;
-    char    **grid;
-}           t_map;
+    int rows;
+    int cols;
+    char empty;
+    char obstacles;
+    char full;
+    char **grid;
+} t_map;
 
-void    free_grid(t_map *m, int n)
+void free_grid(t_map *m, int n)
 {
     if (!m->grid)
-        return ;
+        return;
     while (n-- > 0)
         free(m->grid[n]);
     free(m->grid);
     m->grid = NULL;
 }
 
-int     printable(char c)
+int valid_char(t_map *m, char c)
 {
-    return c >= 32 && c <= 126;
+    return (c == m->obstacles || c == m->empty);
 }
 
-int     min3(int a, int b, int c)
+int min3(int a, int b, int c)
 {
     int m = a;
-    if (b < m) m = b;
-    if (c < m) m = c;
+    if (b < m)
+        m = b;
+    if (c < m)
+         m = c;
     return m;
 }
 
-int     parse_header(FILE *f, t_map *m)
+int ft_atoi(char *str)
 {
-    if (fscanf(f, "%i %c %c %c", &m->rows, &m->empty, &m->obstacle, &m->full) != 4)
-        return 0;
-    if (m->rows < 1 || m->empty == m->obstacle || m->empty == m->full || m->obstacle == m->full)
-        return 0;
-    if (!printable(m->empty) || !printable(m->obstacle) || !printable(m->full))
-        return 0;
-    return 1;
+    int i = 0, sign = 1, res = 0;
+    while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+        i++;
+    if (str[i] == '-' || str[i] == '+')
+    {
+        if (str[i] == '-') sign = -1;
+        i++;
+    }
+    while (str[i] >= '0' && str[i] <= '9')
+    {
+        res = res * 10 + (str[i] - '0');
+        i++;
+    }
+    return (res * sign);
 }
 
-int     parse_map(FILE *f, t_map *m)
+int ft_strlen(char *str)
 {
-    char    *line = NULL;
-    size_t  cap = 0;
-    ssize_t n;
+    int i = 0;
+    while (str[i]) i++;
+    return (i);
+}
 
-    getline(&line, &cap, f);
-    m->cols = -1;
-    m->grid = calloc(m->rows, sizeof(char *));
-    if (!m->grid)
+int parse_header(FILE *f, t_map *m)
+{
+    char *line = NULL;
+    size_t cap = 0;
+    int length;
+
+    if (getline(&line, &cap, f) == -1)
         return (free(line), 0);
 
-    for (int i = 0; m->rows; i++)
+    length = ft_strlen(line);
+    if (length < 5 || line[length - 1] != '\n')
+        return (free(line), 0);
+
+    m->empty = line[length - 4];
+    m->obstacles = line[length - 3];
+    m->full = line[length - 2];
+    line[length - 4] = '\0';
+    m->rows = ft_atoi(line);
+    free(line);
+
+    if (m->rows <= 0)
+        return (0);
+    if (m->empty == m->obstacles || m->empty == m->full || m->obstacles == m->full)
+        return (0);
+    return (1);
+}
+
+int parse_map(FILE *f, t_map *m)
+{
+    char *line = NULL;
+    size_t cap = 0;
+
+    m->grid = malloc(sizeof(char *) * m->rows);
+    if (!m->grid)
+        return (0);
+
+    int i = 0;
+    while (i < m->rows)
     {
-        n = getline(&line, &cap, f);
-        if (n < 1)
+        if (getline(&line, &cap, f) == -1)
             return (free(line), free_grid(m, i), 0);
 
-        while (n > 0 && (line[i] == '\n' || line[i] == 'r'))
-            line[--n] = '\0';
+        int j = 0;
+        while (line[j] && line[j] != '\n')
+            j++;
 
-        if (m->cols == -1)
-            m->cols = n;
-        if (n != m->cols)
+        if (i == 0)
+            m->cols = j;
+        if (j != m->cols)
             return (free(line), free_grid(m, i), 0);
 
-        m->grid[i] = malloc(m->cols + 1);
+        m->grid[i] = malloc(j + 1);
         if (!m->grid[i])
             return (free(line), free_grid(m, i), 0);
 
-        for (int j = 0; j < m->cols; j++)
+        for (int j = 0; line[j] && line[j] != '\n'; j++)
         {
-            if (line[j] != m->empty && line[j] != m->obstacle && line[j] != m->full)
+            if (!valid_char(m, line[j]))
                 return (free(line), free_grid(m, i + 1), 0);
-
-            if (line[j] == m->full)
-                m->grid[i][j] = m->empty;
-            else
-                m->grid[i][j] = line[j];
+            m->grid[i][j] = line[j];
         }
-        m->grid[i][m->cols] = '\0';
+        m->grid[i][j] = '\0';
+        i++;
     }
     free(line);
-    return 1;
+    return (1);
 }
 
-void    solve(t_map *m)
+void solve(t_map *m)
 {
-    int     best = 0;
-    int     br = 0;
-    int     bc = 0;
-    int     dp[m->rows][m->cols];
+    int best = 0;
+    int max_i = 0;
+    int max_j = 0;
+    int **dp;
+
+    dp = malloc(sizeof(int *) * m->rows);
+    if (!dp)
+        return ;
+    for (int i = 0; i < m->rows; i++)
+    {
+        dp[i] = calloc(m->cols, sizeof(int));
+        if (!dp[i])
+        {
+            while (i-- > 0)
+                free(dp[i]);
+            return (free(dp));
+        }
+    }
 
     for (int i = 0; i < m->rows; i++)
     {
         for (int j = 0; j < m->cols; j++)
         {
-            if (m->grid[i][j] == m->obstacle)
+            if (m->grid[i][j] == m->obstacles)
                 dp[i][j] = 0;
-            else if (i == 0 || j == 0)
-                dp[i][j] = 1;
-            else
-                dp[i][j] = min3(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
-
+            else if (m->grid[i][j] == m->empty)
+            {
+                if (i == 0 || j == 0)
+                    dp[i][j] = 1;
+                else
+                    dp[i][j] = 1 + min3(dp[i][j - 1], dp[i - 1][j], dp[i - 1][j - 1]);
+            }
             if (dp[i][j] > best)
             {
                 best = dp[i][j];
-                br = i - best + 1;
-                bc = j - best + 1;
+                max_i = i;
+                max_j = j;
             }
         }
     }
-    for (int i = br; i < br + best; i++)
-        for (int j = bc; j < bc + best; j++)
+
+    for (int i = max_i - best + 1; i <= max_i; i++)
+        for (int j = max_j - best + 1; j <= max_j; j++)
             m->grid[i][j] = m->full;
 
     for (int i = 0; i < m->rows; i++)
         fprintf(stdout, "%s\n", m->grid[i]);
+    
+    for (int i = 0; i < m->rows; i++)
+        free(dp[i]);
+    free(dp);
 }
 
-
-void    process(FILE *f)
+int main(int ac, char **av)
 {
-    t_map   m;
-    m.grid = NULL;
+    t_map m;
 
-    if (!parse_header(f, &m) || !parse_map(f, &m))
+    if (ac == 1)
     {
-        fprintf(stderr, "map error\n");
-        return ;
+        if (!parse_header(stdin, &m) || !parse_map(stdin, &m))
+            return (fprintf(stderr, "error map\n"), 1);
+        solve(&m);
+        free_grid(&m, m.rows);
+        return 0;
     }
-    solve(&m);
-    free_grid(&m, m.rows);
-}
-
-int     main(int ac, char **av)
-{
-    if (ac < 2)
-        return (process(stdin), 0);
-
-    int i = 1;
-    while (i < ac)
+    for (int i = 1; i < ac; i++)
     {
         FILE *f = fopen(av[i], "r");
-        if (!f)
-            fprintf(stderr, "map error\n");
-        else
+        if (!f || !parse_header(f, &m) || !parse_map(f, &m))
         {
-            process(f);
-            fclose(f);
+            fprintf(stderr, "error map\n");
+            if (f)
+                fclose(f);
+            return 1;
         }
-        if (i + 1 < ac)
+        solve(&m);
+        free_grid(&m, m.rows);
+        if (i < ac - 1)
             fprintf(stdout, "\n");
-        i++;
+        fclose(f);
     }
-
     return 0;
 }
